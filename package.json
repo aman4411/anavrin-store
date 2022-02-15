@@ -1,0 +1,27 @@
+{
+  "name": "anavrin-store",
+  "version": "1.0.0",
+  "description": "anavrin-store is an ecommerce portal built using MERN stack.",
+  "main": "backend/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node backend/server.js",
+    "dev": "nodemon backend/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aman4411/anavrin-store.git"
+  },
+  "author": "Aman Mehta",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aman4411/anavrin-store/issues"
+  },
+  "homepage": "https://github.com/aman4411/anavrin-store#readme",
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "express": "^4.17.2",
+    "mongoose": "^6.2.1",
+    "nodemon": "^2.0.15"
+  }
+}
