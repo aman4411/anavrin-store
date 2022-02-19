@@ -2,6 +2,8 @@ const User = require('../models/userModel')
 const ErrorHandler = require('../utils/errorHandler');
 const catchAsyncError = require('../middleware/catchAsyncErrors');
 const sendJwtToken = require('../utils/sendJwtToken');
+const sendEmail = require('../utils/sendEmail');
+const crypto = require('crypto');
 
 //register user
 exports.registerUser = catchAsyncError(async (req,resp,next) => {
@@ -52,4 +54,66 @@ exports.logoutUser = catchAsyncError(async (req,resp,next) => {
         success:true,
         message:'User logged out successfully'
     })
-})
+});
+
+//forgot password
+exports.forgotPassword = catchAsyncError(async (req,resp,next) => {
+
+    const user = await User.findOne({email:req.body.email});
+
+    if(!user){
+        return next(new ErrorHandler('User does not exists'),404);
+    }
+
+    //get reset password token
+    const resetPasswordToken = user.getResetPasswordToken();
+    await user.save({validateBeforeSave: false});
+
+    const resetPasswordUrl = `${req.protocol}://${req.get("host")}/api/user/password/reset/${resetPasswordToken}`;
+
+    const message = `Hello ${user.name} \n\nYour password reset token is : \n\n${resetPasswordUrl} \n\nIf you have not requested this email, then please ignore it. \n\nThanks & Regards\nTeam Anavrin Store.`
+
+    try{
+        await sendEmail({
+            email:user.email,
+            subject:`Anavrin Store Account : Password Recovery`,
+            message
+        });
+        
+        resp.status(200).json({
+            success:true,
+            message:`Password reset email has been sent to email : ${user.email}`
+        })
+    }catch (error){
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+        await user.save({validateBeforeSave: false});
+        return next(new ErrorHandler(error.message,500));
+    }
+
+});
+
+//reset password
+exports.resetPassword = catchAsyncError(async (req,resp,next) => {
+    //creating token hash
+    const resetPasswordToken  = crypto.createHash('sha256').update(req.params.token).digest('hex');
+
+    const user = await User.findOne({
+        resetPasswordToken,
+        resetPasswordExpire:{$gt:Date.now()}
+    });
+
+    if(!user){
+        return next(new ErrorHandler('Invalid Request'),400);
+    }
+
+    if(req.body.password !== req.body.confirmPassword){
+        return next(new ErrorHandler('Password does not match'),400);
+    }
+
+    user.password = req.body.password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+    await user.save();
+    sendJwtToken(user,200,resp);
+});
