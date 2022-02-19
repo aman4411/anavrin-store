@@ -1,11 +1,11 @@
 const Product = require('../models/productModel')
-const mongoose = require("mongoose");
 const ErrorHandler = require('../utils/errorHandler');
 const catchAsyncError = require('../middleware/catchAsyncErrors');
 const ApiFeatures = require('../utils/apiFeatures');
 
 //create product  -- Admin
 exports.createProduct = catchAsyncError(async (req, resp, next) => {
+    req.body.createdBy = req.user.id;
     const product = await Product.create(req.body);
     resp.status(201).json({
         success: true,
