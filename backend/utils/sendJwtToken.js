@@ -9,7 +9,7 @@ const sendToken = (user,statusCode,resp) => {
         expires:new Date(Date.now + process.env.COOKIE_EXPIRE *24*60*60*1000)
     }
 
-    resp.status(statusCode).cookie('jwtToken',token,cookieOptions).json({
+    resp.status(statusCode).cookie('token',token,cookieOptions).json({
         success:true,
         token,
         user

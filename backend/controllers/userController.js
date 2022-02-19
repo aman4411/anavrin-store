@@ -15,7 +15,7 @@ exports.registerUser = catchAsyncError(async (req,resp,next) => {
             url:`sample url`
         }
     });
-    
+
     sendJwtToken(user,201,resp);
 });
 
@@ -38,4 +38,18 @@ exports.loginUser = catchAsyncError(async (req,resp,next) => {
     }
 
     sendJwtToken(user,200,resp);
+});
+
+//logout user
+exports.logoutUser = catchAsyncError(async (req,resp,next) => {
+
+    resp.cookie("token",null,{
+        expires: new Date(Date.now()),
+        httpOnly:true
+    });
+
+    resp.status(200).json({
+        success:true,
+        message:'User logged out successfully'
+    })
 })
