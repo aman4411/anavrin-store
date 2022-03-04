@@ -1,9 +1,13 @@
-import logo from './logo.svg';
+import {BrowserRouter as Router } from 'react-router-dom';
+import Header from './component/layout/Header/Header';
+import ReactNavbar from 'overlay-navbar/dist/lib/ReactNavbar';
 import './App.css';
 
 function App() {
   return (
-    <h1>Anavrin Store</h1>
+    <Router>
+      <Header/>
+    </Router>
   );
 }
 
