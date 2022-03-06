@@ -1,10 +1,10 @@
-import {BrowserRouter as Router } from 'react-router-dom'
+import {BrowserRouter as Router,Route, Routes } from 'react-router-dom'
 import Header from './component/layout/Header/Header'
-import ReactNavbar from 'overlay-navbar/dist/lib/ReactNavbar';
 import WebFont from 'webfontloader'
 import './App.css';
 import React, { useEffect } from 'react';
 import Footer from './component/layout/Footer/Footer';
+import Home from './component/Home/Home.js'
 
 
 function App() {
@@ -18,8 +18,11 @@ function App() {
   });
   return (
     <Router>
-      <Header/>
-      <Footer/>
+      <Header />
+      <Routes>
+        <Route extact path='/' element={<Home/>} />
+      </Routes>
+      <Footer />
     </Router>
   );
 }
