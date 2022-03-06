@@ -4,6 +4,7 @@ import logo from "../../../images/logo.png";
 
 const Header = () => {
   return <ReactNavbar 
+  burgerColor="#ffffff"
   burgerColorHover= "#eb4034"
   logo={logo}
   logoWidth= "20vmax"
