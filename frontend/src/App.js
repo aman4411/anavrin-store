@@ -5,6 +5,7 @@ import './App.css';
 import React, { useEffect } from 'react';
 import Footer from './component/layout/Footer/Footer';
 import Home from './component/Home/Home.js'
+import Loader from './component/layout/Loader/Loader';
 
 
 function App() {
